@@ -16,7 +16,6 @@ module.exports = function(app) {
       user.scores[i] = parseInt(user.scores[i]);
     }
 
-    // default friend match is the first friend but result will be whoever has the minimum difference in scores
     var bestMatch = 0;
     var minimumDifference = 40;
   
