@@ -22,7 +22,7 @@ app.use(express.json());
 
 // ================================================================================
 // ROUTER
-// The below points our server to a series of "route" files.
+// The below points our server to a series of "routing" files.
 // These routes give our server a "map" of how to respond when users visit or request data from various URLs.
 // ================================================================================
 
