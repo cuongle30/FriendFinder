@@ -153,7 +153,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h3 class="modal-title">Your New Best Friend</h1>
+                    <h3 class="modal-title">Your Friend Match</h1>
                 </div>
                 <div class="modal-body">
                     <h2 id="matchFriend"></h2>
@@ -168,7 +168,7 @@
 
 <footer class="footer">
         <div class="container">
-          <p><a href="/friends">API Friends List</a>
+          <p><a href="/friends">Friends List</a>
         </div>
       </footer>
   
@@ -179,11 +179,6 @@
         height: auto
     }
 </style>
-
-    <script type="text/javascript">
-	  src="https://code.jquery.com/jquery-3.2.1.min.js"
-	  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-      crossorigin="anonymous"</script>
     
     <script>
         // Capture user input
@@ -194,8 +189,13 @@
           function validateForm() {
             var isValid = true;
             $(".form-control").each(function() {
-              if ($(this).val() === "") {
+              if ($(this).val() === ""|| $("#photo").val() === "") {
                 isValid = false;
+              }if ($("#q1").val() === "" || $("#q2").val() === "" || $("#q3").val() === "" || 
+              $("#q4").val() === "" || $("#qu5").val() === "" || $("#q6").val() === "" || 
+              $("#q7").val() === "" || $("#q8").val() === "" || $("#q9").val() === "" || 
+              $("#q10").val() === "") {
+              isValid = false;
               }
             });
             return isValid;
@@ -219,10 +219,10 @@
               ]
             };
     
-            // Post to friends API
+            // Post to friends list
             $.post("/friends", userData, function(data) {
     
-              // Grab the result from the AJAX post so that the best match's name and photo are displayed.
+              // Post results from friends list
               $("#matchFriend").text(data.name);
               $("#matchFriendPhoto").attr("src", data.photo);
     
@@ -231,7 +231,7 @@
     
             });
           } else {
-            alert("Please fill out all fields before submitting!");
+            alert("Please fill out all fields before submitting");
           }
         });
       </script>
