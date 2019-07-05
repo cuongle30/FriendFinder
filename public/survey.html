@@ -148,7 +148,7 @@
     <button class="btn btn-lg btn-primary btn-block" id="submit">Submit</button>
 </div>
 <br>
-<div id="matchFriendModal" class="modal fade" role="dialog">
+<div id="matchFriendModal" class="modal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -160,7 +160,7 @@
                     <img id="matchFriendPhoto" src="#">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="close btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -178,57 +178,131 @@
         width: 400px;
         height: auto
     }
+    .modal {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(1.1);
+        transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+    }
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 1rem 1.5rem;
+        width: 24rem;
+        border-radius: 0.5rem;
+    }
+    .close {
+        float: right;
+        width: 1.5rem;
+        line-height: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 0.25rem;
+        background-color: lightgray;
+    }
+    .close:hover {
+        background-color: darkgray;
+    }
+    .show-modal {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1.0);
+        transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+    }
 </style>
     
     <script>
+
+
         // Capture user input
-        $("#submit").on("click", function(event) {
+        document.querySelector('#submit').addEventListener('click', function(event) {
           event.preventDefault();
-    
+          var q1 = document.querySelector('#q1')
+                var q2 = document.querySelector('#q2')
+                var q3 = document.querySelector('#q3')
+                var q4 = document.querySelector('#q4')
+                var q5 = document.querySelector('#q5')
+                var q6 = document.querySelector('#q6')
+                var q7 = document.querySelector('#q7')
+                var q8 = document.querySelector('#q8')
+                var q9 = document.querySelector('#q9')
+                var q10 = document.querySelector('#q10')
           // Form validation
           function validateForm() {
             var isValid = true;
-            $(".form-control").each(function() {
-              if ($(this).val() === ""|| $("#photo").val() === "") {
+
+            //document.querySelector('.form-control').forEach(function () {
+              if (document.querySelector('#name').value === ""|| document.querySelector('#photo').value === "") {
                 isValid = false;
-              }if ($("#q1").val() === "" || $("#q2").val() === "" || $("#q3").val() === "" || 
-              $("#q4").val() === "" || $("#qu5").val() === "" || $("#q6").val() === "" || 
-              $("#q7").val() === "" || $("#q8").val() === "" || $("#q9").val() === "" || 
-              $("#q10").val() === "") {
+              }if (q1.value === "" || q2.value === "" || q3.value === "" || 
+              q4.value === "" || q5.value === "" || q6.value === "" || 
+              q7.value === "" || q8.value === "" || q9.value === "" || 
+              q10.value === "") {
               isValid = false;
               }
-            });
+            
             return isValid;
           }
           if (validateForm()) {
             // Create an object for the user"s data
             var userData = {
-              name: $("#name").val(),
-              photo: $("#photo").val(),
+              name: document.querySelector('#name').value,
+              photo: document.querySelector('#photo').value,
               scores: [
-                $("#q1").val(),
-                $("#q2").val(),
-                $("#q3").val(),
-                $("#q4").val(),
-                $("#q5").val(),
-                $("#q6").val(),
-                $("#q7").val(),
-                $("#q8").val(),
-                $("#q9").val(),
-                $("#q10").val()
+                q1.value,
+                q2.value,
+                q3.value,
+                q4.value,
+                q5.value,
+                q6.value,
+                q7.value,
+                q8.value,
+                q9.value,
+                q10.value
               ]
             };
-    
             // Post to friends list
-            $.post("/friends", userData, function(data) {
-    
+            fetch("/friends", {
+              method: 'POST',
+              data: userData,
+              headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(userData)
+        }).then(respond => respond.json())
+        .then(res => {
               // Post results from friends list
-              $("#matchFriend").text(data.name);
-              $("#matchFriendPhoto").attr("src", data.photo);
-    
+              document.querySelector('#matchFriend').innerText = res.name
+              document.querySelector('#matchFriendPhoto').setAttribute("src", res.photo);
+              console.log(res)
               // Display best match
-              $("#matchFriendModal").modal("toggle");
-    
+              $("#matchFriendModal").modal("toggle")
+            //   var modal = document.querySelector('.modal')
+            // var submit = document.querySelector('#submit')
+            // var closeButton = document.querySelector(".close");
+
+            // function toggleModal() {
+            //   modal.classList.toggle("show-modal");
+            //   console.log('show modal')
+            // }
+
+            // function windowOnClick(event) {
+            //   if (event.target === modal) {
+            //     toggleModal();
+            //   }
+            // }
+
+            // submit.addEventListener("click", toggleModal);
+            // console.log('clicked submit')
+            // closeButton.addEventListener("click", toggleModal);
+            // window.addEventListener("click", windowOnClick);
             });
           } else {
             alert("Please fill out all fields before submitting");
